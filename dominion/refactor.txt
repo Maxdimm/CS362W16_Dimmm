@@ -1,0 +1,1 @@
+The cards I refactored are: Smithy, Village, great_hall, ambassador, and ourpost. The functions are located below line 664.
