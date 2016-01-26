@@ -941,10 +941,10 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case smithy:
-     Csmithy(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
+     Csmithy(card, choice1, choice2, choice3, gameState *state, handPos, *bonus);
 		
     case village:
-      Cvillage(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
+      Cvillage(card, choice1, choice2, choice3, gameState *state, handPos, *bonus);
 		
     case baron:
       state->numBuys++;//Increase buys by 1!
@@ -998,7 +998,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case great_hall:
-      Cgreat_hall(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
+      Cgreat_hall(card, choice1, choice2, choice3, gameState *state, handPos, *bonus);
 		
     case minion:
       //+1 action
@@ -1134,7 +1134,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case ambassador:
-      Cambassador(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
+      Cambassador(card,choice1, choice2, choice3, gameState *state, handPos, *bonus);
 	  
     case cutpurse:
 
@@ -1189,7 +1189,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case outpost:
-     Coutpost(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
+     Coutpost(card, choice1, choice2, choice3, gameState *state, handPos, *bonus);
 		
     case salvager:
       //+1 buy
