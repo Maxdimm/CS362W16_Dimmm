@@ -7,10 +7,10 @@
 #include <assert.h>
 #include "rngs.h"
 
-// Tests discardCard() in dominion.c
+// Tests shuffle() in dominion.c
 int main(int argc, char **argv)
 {
-    printf("TESTING discardCard\n");
+    printf("TESTING kingdomCards\n");
 
     srand(time(NULL));
 
@@ -21,20 +21,21 @@ int main(int argc, char **argv)
 
     printf("RANDOM TESTS\n");
 
-    int numtests = 100;
+    int numtests = 1000;
+    int times_unshuffled = 0;
     for(int i = 0; i < numtests; i++){
         // Copy original gamestate for later comparison
         struct gameState orig;
         memcpy(&orig, &G, sizeof(struct gameState));
 
-        int trash = rand() % 2;
         int player = rand() % numplayers;
-        if(G.handCount[player] > 0){
-            discardCard(G.handCount[player] - 1, player, &G, trash);
-            assert(orig.handCount[player] - 1 == G.handCount[player]);
-            if(!trash) assert(orig.playedCardCount + 1 == G.playedCardCount);
-        }
+        shuffle(player, &G);
+        if(memcmp(&orig.deck[player], &G.deck[player], sizeof(int)*MAX_DECK) != 0) times_unshuffled++;
     }
+
+    printf("DECK PROPERLY SHUFFLED %d/%d TIMES\n", numtests - times_unshuffled, numtests);
+
+    assert(times_unshuffled < numtests / 2); //Assert that shuffle() changed the card order at least half of the time.
 
     printf("ALL TESTS OK\n");
 }
