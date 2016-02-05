@@ -7,7 +7,7 @@
 #include <assert.h>
 #include "rngs.h"
 
-// Tests shuffle() in dominion.c
+// Tests the shuffle() function in dominion.c
 int main(int argc, char **argv)
 {
     printf("TESTING kingdomCards\n");
