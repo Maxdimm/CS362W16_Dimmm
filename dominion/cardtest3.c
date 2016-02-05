@@ -1,84 +1,152 @@
+#include "dominion.h"
 #include "dominion_helpers.h"
+#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <time.h>
 #include <assert.h>
 #include "rngs.h"
-#include <time.h>
 
-#define DEBUG 0
-#define NOISY_TEST 1
+// Tests the minion card in dominion.c
+int main (int argc, char** argv) {
+    printf("TESTING minion card\n");
 
-int main(){
     srand(time(NULL));
+
+    int numplayers = 2;
     struct gameState G;
-    int seed = 1000;
-    int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse,
-           sea_hag, tribute, smithy};
+    int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse, sea_hag, tribute, smithy};
 
-    printf("TESTING councilRoom card\n");
-    printf("RANDOM TESTS\n"):
-    int i, j;
-    //Loops through all four players for testing purposes
-    for(i = 0; i < 4; i++){
-        //Initialize game with 4 players
-        initializeGame(4, k, seed, &G);
+    printf("RANDOM TESTS\n");
 
-        printf("\nTesting player %d\n", i + 1);
-        //Set up whose turn it is
-        G.whoseTurn = i;
+    int numtests = 100;
+    for(int i = 0; i < numtests; i++){
+        initializeGame(numplayers, k, rand(), &G);
+          int money = 0;
+          int minionPos = -1;
+          int adventurerPos = -1;
+          int i=0;
 
-        //Reset the played cards for the next player
-        G.playedCards[0] = -1;
-        G.playedCardCount = 0;
+          int numMinions = 0;
+          int numAdventurers = 0;
 
-        //Set up the number of buys
-        G.numBuys = 0;
-
-        //Sets each player's hand count to 0
-        for(j = 0; j < 4; j++)
-            G.handCount[j] = 0;
-
-        //Put the council room card in the player's hands
-        G.hand[i][0] = council_room;
-        G.handCount[i] = 1;
-
-        printf("Playing council room card...\n");
-
-        //Run council room card
-        councilRoomCard(&G, 0);
-
-        //Confirm if council room card is removed from the hand
-        if(G.hand[i][0] != council_room)
-            printf("Confirmed removal of council room card: PASS\n");
-        else
-            printf("Confirmed removal of council room card: FAIL\n");
-
-        //Check if the total cards in hand is 4
-        if(G.handCount[i] == 4)
-            printf("Confirmed 4 card drawn in hand: %d - PASS\n", G.handCount[i]);
-        else
-            printf("Confirmed 4 card drawn in hand: %d - FAIL\n", G.handCount[i]);
-
-        //Confirm if the number of buys is 1
-        if(G.numBuys == 1)
-            printf("Confirmed 1 number of buy added: %d - PASS\n", G.numBuys);
-        else
-            printf("Confirmed 1 number of buy added: %d - FAIL\n", G.numBuys);
-
-        //Confirm if the hand count for all OTHER players is 1
-        for(j = 0; j < 4; j++){
-            if(j != i){
-                if(G.handCount[j] == 1)
-                    printf("Confirmed 1 card drawn from player %d: %d - PASS\n", j + 1, G.handCount[j]);
-                else
-                    printf("Confirmed 1 card drawn from player %d: %d - FAIL\n", j + 1, G.handCount[j]);
+          while (!isGameOver(&G)) {
+            money = 0;
+            minionPos = -1;
+            adventurerPos = -1;
+            for (i = 0; i < numHandCards(&G); i++) {
+              if (handCard(i, &G) == copper)
+            money++;
+              else if (handCard(i, &G) == silver)
+            money += 2;
+              else if (handCard(i, &G) == gold)
+            money += 3;
+              else if (handCard(i, &G) == minion)
+            minionPos = i;
+              else if (handCard(i, &G) == adventurer)
+            adventurerPos = i;
             }
-        }
+
+            if (whoseTurn(&G) == 0) {
+              if (minionPos != -1) {
+                struct gameState orig;
+                memcpy(&orig, &G, sizeof(struct gameState));
+
+                int choice1 = -1;
+                int choice2 = -1;
+                switch(rand() % 3){
+                    case 1:
+                        choice1 = 1; break;
+                    case 2:
+                        choice2 = 1; break;
+                }
+
+                playCard(minionPos, choice1, choice2, -1, &G); 
+                
+                int player = whoseTurn(&G);
+
+                assert(G.numActions == orig.numActions + 1);
+                if(choice1 == 1){
+                    assert(G.coins == orig.coins + 2);
+                }else if(choice2 == 1){
+                    for(int eachPlayer = 0; eachPlayer < numplayers; eachPlayer++){
+                        assert(G.handCount[eachPlayer] <= 4);
+                    }
+                }
+                money = 0;
+                i=0;
+            while(i<numHandCards(&G)){
+              if (handCard(i, &G) == copper){
+                playCard(i, -1, -1, -1, &G);
+                money++;
+              }
+              else if (handCard(i, &G) == silver){
+                playCard(i, -1, -1, -1, &G);
+                money += 2;
+              }
+              else if (handCard(i, &G) == gold){
+                playCard(i, -1, -1, -1, &G);
+                money += 3;
+              }
+              i++;
+            }
+              }
+
+              if (money >= 8) {
+                buyCard(province, &G);
+              }
+              else if (money >= 6) {
+                buyCard(gold, &G);
+              }
+              else if ((money >= 4) && (numMinions < 2)) {
+                buyCard(minion, &G);
+                numMinions++;
+              }
+              else if (money >= 3) {
+                buyCard(silver, &G);
+              }
+
+              endTurn(&G);
+            }
+            else {
+              if (adventurerPos != -1) {
+            playCard(adventurerPos, -1, -1, -1, &G); 
+            money = 0;
+            i=0;
+            while(i<numHandCards(&G)){
+              if (handCard(i, &G) == copper){
+                playCard(i, -1, -1, -1, &G);
+                money++;         
+              }
+              else if (handCard(i, &G) == silver){
+                playCard(i, -1, -1, -1, &G);
+                money += 2;
+              }
+              else if (handCard(i, &G) == gold){
+                playCard(i, -1, -1, -1, &G);
+                money += 3;
+              }
+              i++;
+            }
+              }
+
+              if (money >= 8) {
+                buyCard(province, &G);
+              }
+              else if ((money >= 6) && (numAdventurers < 2)) {
+            buyCard(adventurer, &G);
+            numAdventurers++;
+              }else if (money >= 6){
+                buyCard(gold, &G);
+                }
+              else if (money >= 3){
+                buyCard(silver, &G);
+              }
+              
+              endTurn(&G);      
+            }
+          } // end of While
     }
 
-    printf("\nTesting complete...\n\n");
-
-    return 0;
-
+    printf("ALL TESTS OK\n");
 }
