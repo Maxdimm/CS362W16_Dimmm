@@ -65,6 +65,31 @@ card3:
 card4:
 	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.c cardtest4.c rngs.c -o cardtest4 -lm -g
 
+tests: unittest1.o unittest2.o unittest3.o unittest4.o cardtest1.o cardtest2.o cardtest3.o cardtest4.o randomtestadventurer.out randomtestcard.out testdominion.out randomtestcard_tarantula.out minion_tarantula.out
+
+unittest1.o: unittest1.c dominion.o rngs.o
+	gcc -o unittest1.o -g unittest1.c dominion.o rngs.o $(CFLAGS)
+
+unittest2.o: unittest2.c dominion.o rngs.o
+	gcc -o unittest2.o -g unittest2.c dominion.o rngs.o $(CFLAGS)
+
+unittest3.o: unittest3.c dominion.o rngs.o
+	gcc -o unittest3.o -g unittest3.c dominion.o rngs.o $(CFLAGS)
+
+unittest4.o: unittest4.c dominion.o rngs.o
+	gcc -o unittest4.o -g unittest4.c dominion.o rngs.o $(CFLAGS)
+
+cardtest1.o: cardtest1.c dominion.o rngs.o
+	gcc -o cardtest1.o -g cardtest1.c dominion.o rngs.o $(CFLAGS)
+
+cardtest2.o: cardtest2.c dominion.o rngs.o
+	gcc -o cardtest2.o -g cardtest2.c dominion.o rngs.o $(CFLAGS)
+
+cardtest3.o: cardtest3.c dominion.o rngs.o
+	gcc -o cardtest3.o -g cardtest3.c dominion.o rngs.o $(CFLAGS)
+
+cardtest4.o: cardtest4.c dominion.o rngs.o
+	gcc -o cardtest4.o -g cardtest4.c dominion.o rngs.o $(CFLAGS)
 
 myTest:
 	./unittest1 &> unittestresult.out
