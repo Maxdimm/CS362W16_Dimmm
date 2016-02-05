@@ -7,35 +7,27 @@
 #include <assert.h>
 #include "rngs.h"
 
-// Tests the shuffle() function in dominion.c
+// Tests compare() in dominion.c
 int main(int argc, char **argv)
 {
-    printf("TESTING kingdomCards\n");
-
-    srand(time(NULL));
-
-    int numplayers = rand() % (MAX_PLAYERS - 1) + 1;
-    struct gameState G;
-    int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse, sea_hag, tribute, smithy};
-    initializeGame(numplayers, k, rand(), &G);
-
+    printf("TESTING compare\n");
     printf("RANDOM TESTS\n");
 
+    srand(time(NULL));
     int numtests = 1000;
-    int times_unshuffled = 0;
     for(int i = 0; i < numtests; i++){
-        // Copy original gamestate for later comparison
-        struct gameState orig;
-        memcpy(&orig, &G, sizeof(struct gameState));
+        int a = rand(); // a is a positive integer
+        int b = a - 1 - rand() % 1000000; // By definition, a > b
 
-        int player = rand() % numplayers;
-        shuffle(player, &G);
-        if(memcmp(&orig.deck[player], &G.deck[player], sizeof(int)*MAX_DECK) != 0) times_unshuffled++;
+        switch(rand() % 3){
+            case 0:
+                assert(compare(&a, &b) == 1); break;
+            case 1:
+                assert(compare(&b, &a) == -1); break;
+            case 2:
+                assert(compare(&a, &a) == 0); break;
+        }
     }
-
-    printf("DECK PROPERLY SHUFFLED %d/%d TIMES\n", numtests - times_unshuffled, numtests);
-
-    assert(times_unshuffled < numtests / 2); //Assert that shuffle() changed the card order at least half of the time.
 
     printf("ALL TESTS OK\n");
 }
