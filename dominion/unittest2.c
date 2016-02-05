@@ -7,7 +7,7 @@
 #include <assert.h>
 #include "rngs.h"
 
-// Tests kingdomCards() in dominion.c
+// Tests kingdomCards() in dominion.c 
 int main(int argc, char **argv)
 {
     printf("TESTING kingdomCards\n");
