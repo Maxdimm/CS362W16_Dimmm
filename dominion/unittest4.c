@@ -7,25 +7,32 @@
 #include <assert.h>
 #include "rngs.h"
 
-// Tests the compare() function in dominion.c
+// Tests discardCard() in dominion.c
 int main(int argc, char **argv)
 {
-    printf("TESTING compare\n");
-    printf("RANDOM TESTS\n");
+    printf("TESTING discardCard\n");
 
     srand(time(NULL));
-    int numtests = 1000;
-    for(int i = 0; i < numtests; i++){
-        int a = rand(); // a is a positive integer
-        int b = a - 1 - rand() % 1000000; // By definition, a > b
 
-        switch(rand() % 3){
-            case 0:
-                assert(compare(&a, &b) == 1); break;
-            case 1:
-                assert(compare(&b, &a) == -1); break;
-            case 2:
-                assert(compare(&a, &a) == 0); break;
+    int numplayers = rand() % (MAX_PLAYERS - 1) + 1;
+    struct gameState G;
+    int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse, sea_hag, tribute, smithy};
+    initializeGame(numplayers, k, rand(), &G);
+
+    printf("RANDOM TESTS\n");
+
+    int numtests = 100;
+    for(int i = 0; i < numtests; i++){
+        // Copy original gamestate for later comparison
+        struct gameState orig;
+        memcpy(&orig, &G, sizeof(struct gameState));
+
+        int trash = rand() % 2;
+        int player = rand() % numplayers;
+        if(G.handCount[player] > 0){
+            discardCard(G.handCount[player] - 1, player, &G, trash);
+            assert(orig.handCount[player] - 1 == G.handCount[player]);
+            if(!trash) assert(orig.playedCardCount + 1 == G.playedCardCount);
         }
     }
 
