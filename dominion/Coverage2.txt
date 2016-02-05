@@ -1,0 +1,3 @@
+Most of the tests result in a high coverage according to gcov. Most range from 70% to 100%, usually 100 percent when it works. 
+
+This means that the majority of the lines of code within the tests are being used. So unless it runs into the same error every time it should use all of the test
