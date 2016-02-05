@@ -68,7 +68,7 @@ card4:
 unittestresults.out: unittest1.o unittest2.o unittest3.o unittest4.o cardtest1.o cardtest2.o cardtest3.o cardtest4.o
 	rm unittestresults.out; for file in ????test?; do echo Running $${file} >> unittestresults.out; ./$${file} >> unittestresults.out 2>> unittestresults.out; gcov $${file}.gcda | grep "Lines executed" >> unittestresults.out; echo "" >> unittestresults.out; done
 
-tests: unittest1.o unittest2.o unittest3.o unittest4.o cardtest1.o cardtest2.o cardtest3.o cardtest4.o randomtestadventurer.out randomtestcard.out testdominion.out randomtestcard_tarantula.out minion_tarantula.out
+tests: unittest1.o unittest2.o unittest3.o unittest4.o cardtest1.o cardtest2.o cardtest3.o cardtest4.o 
 
 unittest1.o: unittest1.c dominion.o rngs.o
 	gcc -o unittest1.o -g unittest1.c dominion.o rngs.o $(CFLAGS)
