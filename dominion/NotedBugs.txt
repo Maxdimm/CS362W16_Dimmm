@@ -1,0 +1,4 @@
+Cardtest one and two say that the implementation of the smithy card and the minion card are wrong
+Cardtest four says that the implementation is wrong when you choice1 == 2 and money was not increased
+
+unittest3 reports about a 85% success rate on the shuffle function. this can swing from 90% to somewhere near 60 but most times its in the low 80's
