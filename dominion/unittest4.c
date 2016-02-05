@@ -7,7 +7,7 @@
 #include <assert.h>
 #include "rngs.h"
 
-// Tests compare() in dominion.c
+// Tests the compare() function in dominion.c
 int main(int argc, char **argv)
 {
     printf("TESTING compare\n");
