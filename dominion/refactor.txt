@@ -1,1 +1,3 @@
-The cards I refactored are: Smithy, Village, great_hall, ambassador, and ourpost. The functions are located below line 664.
+The cards I refactored are: Smithy, Village, great_hall, ambassador, and ourpost. 
+
+I then changed this list to adventurer, council room, village, great hall and smithy
