@@ -1,0 +1,5 @@
+For both random tests, I made it so it generates a random number of players and the turn order is randomly decided. It makes a 
+copy of the gamestate that we will use as a comparison later. We check the new gamestate throughout to assure the card being tested
+worked the way it was supposed to.  Each run is performed multiple times with different circumstances to make sure the coverage is
+high enough.  The test also checks to see if there were changed to the card's implementation and it will report if there are any.  The bug
+I included in A1 is still there and it will fail. Player 0 will never recieve a card when a player plays the council room card.
