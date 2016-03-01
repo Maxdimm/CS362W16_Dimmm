@@ -59,6 +59,9 @@ randomtestadventurer.out: randomtestadventurer.c dominion.o rngs.o
 randomtestcard.out: randomtestcard.c dominion.o rngs.o
 	gcc -o randomtestcard.out -g randomtestcard.c dominion.o rngs.o $(CFLAGS)
 
+testdominion.out: testdominion.c dominion.o rngs.o interface.o
+	gcc -o testdominion.out -g testdominion.c dominion.o rngs.o interface.o $(CFLAGS)
+
 runtests: testDrawCard 
 	./testDrawCard &> unittestresult.out
 	gcov dominion.c >> unittestresult.out
