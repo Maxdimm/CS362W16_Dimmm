@@ -27,7 +27,7 @@ interface.o: interface.h interface.c
 unittestresults.out: unittest1.o unittest2.o unittest3.o unittest4.o cardtest1.o cardtest2.o cardtest3.o cardtest4.o
 	rm unittestresults.out; for file in ????test?; do echo Running $${file} >> unittestresults.out; ./$${file} >> unittestresults.out 2>> unittestresults.out; gcov $${file}.gcda | grep "Lines executed" >> unittestresults.out; echo "" >> unittestresults.out; done
 	
-tests: unittest1.o unittest2.o unittest3.o unittest4.o cardtest1.o cardtest2.o cardtest3.o cardtest4.o randomtestadventurer.out randomtestcard.out testdominion.out
+tests: unittest1.o unittest2.o unittest3.o unittest4.o cardtest1.o cardtest2.o cardtest3.o cardtest4.o randomtestadventurer.out randomtestcard.out randomtestcard_tarantula.out minion_tarantula.out testdominion.out
 
 unittest1.o: unittest1.c dominion.o rngs.o
 	gcc -o unittest1.o -g unittest1.c dominion.o rngs.o $(CFLAGS)
@@ -61,6 +61,12 @@ randomtestcard.out: randomtestcard.c dominion.o rngs.o
 
 testdominion.out: testdominion.c dominion.o rngs.o interface.o
 	gcc -o testdominion.out -g testdominion.c dominion.o rngs.o interface.o $(CFLAGS)
+
+randomtestcard_tarantula.out: randomtestcard_tarantula.c dominion.o rngs.o
+	gcc -o randomtestcard_tarantula.out -g randomtestcard_tarantula.c dominion.o rngs.o $(CFLAGS)
+
+minion_tarantula.out: minion_tarantula.c dominion.o rngs.o
+	gcc -o minion_tarantula.out -g minion_tarantula.c dominion.o rngs.o $(CFLAGS)
 
 runtests: testDrawCard 
 	./testDrawCard &> unittestresult.out
