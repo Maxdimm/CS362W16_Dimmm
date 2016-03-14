@@ -1,0 +1,32 @@
+The bug I encountered was an issue with my full game tester testdominion.c. It stalled during the buying process of a players turn on a random seed input. I used gdb on the program repeatedly until it happened again, terminated it and stepped through until I could see where the issue happened. It happened when a player had an additional buy but no cards left that he could buy. This happenes because buycard returns -1 because the pile is empty but it loops because G.numbuys never decrements.
+buyCard (supplyPos=0, state=0x7fffffff77e0) at dominion.c:280
+280   who = state->whoseTurn;
+(gdb) s
+282   if (state->numBuys < 1){
+(gdb) s
+286   } else if (supplyCount(supplyPos, state) <1){
+(gdb) s
+supplyCount (card=0, state=0x7fffffff77e0) at dominion.c:321
+321   return state->supplyCount[card];
+(gdb) s
+322 }
+(gdb) print state->supplyCount[card]
+$1 = 0
+(gdb) s
+buyCard (supplyPos=0, state=0x7fffffff77e0) at dominion.c:289
+289     return -1;
+
+The game should end it 3 piles or more are empty, and we shouldn’t be trying to buy cards that late into the game. I added a isGameOver function to the buy loop so it wouldn’t keep trying and get stuck in the loop mentioned above.
+
+That looked like the below:
+while(G.numBuys > 0){
+    // buy card
+}
+
+Became this:
+
+while(G.numBuys > 0 && !isGameOver(&G)){
+    // buy card
+}
+
+The main principle of Agan that I kept in mind was the “make it fail” note. It was a bug that did not happen 100% of the time, so I kept running it until it failed. Then I was able to see the issue and fix the situation.
