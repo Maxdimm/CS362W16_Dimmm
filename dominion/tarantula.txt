@@ -1,0 +1,9 @@
+Ok, how this works is you have to compile minion_tarantula.c (which i added to the makfile) you run ./tarantula.py which will do a couple things:
+
+Its runs minion_tarantula.out which does a test with a random game state on the minion card
+then it runs gcov on dominion.c to create dominion.c.gcov
+finally it records if the test was a success or a failure for each covered line.
+
+It does the above steps 100 times and then prints a suspiciousness rating of every line with a rating that is not zero. It has some basic bar graph implementation to help identify suspicious parts of the code.
+
+A bug was added to the dominion.c at line 957, this change was to only increase the coins by 1 instead of 2. My tatantula implementation finds this by rating the line of code highly in its suspiciousness rating.
