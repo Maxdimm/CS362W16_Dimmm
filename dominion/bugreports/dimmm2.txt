@@ -1,1 +1,1 @@
-
+In testing rogersza's code, the second issue with his implementation i found was in his councilroom function. What the issue was that instead of discarding the card council room when it is played, the function draws the current player another card. Again it is not something that makes the game crash, however like the baron issue, it is not how the card was inteneded to be implemented. The bug happens every time the councilroom function/card is played.
